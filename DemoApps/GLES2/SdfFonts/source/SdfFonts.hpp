@@ -47,8 +47,14 @@
 
 namespace Fsl
 {
+  // This is the main application class, inheriting from DemoAppGLES2.
+  // It demonstrates rendering text using Signed Distance Field (SDF) fonts
+  // and compares it with normal bitmap fonts and Multi-channel Signed Distance Field (MTSDF) fonts.
   class SdfFonts : public DemoAppGLES2
   {
+    // This struct holds the locations of shader uniforms.
+    // Caching these locations after linking the shader program
+    // is more efficient than querying them every frame.
     struct LocationRecord
     {
       GLint OutlineDistance{GLES2::GLValues::InvalidLocation};
@@ -89,23 +95,27 @@ namespace Fsl
 
     struct ShaderRecord
     {
-      GLES2::GLProgram Program;
-      LocationRecord Location;
+      GLES2::GLProgram Program; // The compiled and linked shader program.
+      LocationRecord Location;  // The cached uniform locations.
     };
 
+    // This struct holds the resources for a single font, including the font texture
+    // and the font metadata.
     struct FontRecord
     {
-      GLES2::GLTexture Texture;
-      TextureAtlasSpriteFont Font;
+      GLES2::GLTexture Texture;           // The OpenGL texture for the font.
+      TextureAtlasSpriteFont Font;      // The font data (metrics, kerning, etc.).
     };
 
+    // This struct groups a font with all the meshes that are rendered with it.
     struct ExampleRecord
     {
-      FontRecord Font;
-      MeshRecord Mesh;
+      FontRecord Font;               // The font used for this example.
+      MeshRecord Mesh;   // The meshes that make up the text.
       MeshRecord ScaledMesh;
     };
 
+    // This struct holds all the shader variations needed for rendering the different font types.
     struct FontShaderRecord
     {
       ShaderRecord Normal;
